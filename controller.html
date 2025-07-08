@@ -1,0 +1,157 @@
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <title>Factory Controller</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        
+        <style>
+            #content {
+                margin: 20px;
+            }
+        </style>
+        
+        <script type="text/javascript" src="../src/js/jquery-3.3.1.min.js"></script>
+        <script type="text/javascript" src="../common/js/jquery-ui-1.9.2.custom.js"></script>
+        <script type="text/javascript" src="../common/js/bootstrap.min.js"></script>
+        
+        <link rel="stylesheet" href="../common/css/jquery-ui-1.9.2.custom.min.css">
+        <link rel="stylesheet" href="../common/css/bootstrap.min.css" type="text/css">
+        <script type="text/javascript" src="../common/js/general_func.js"></script>
+       
+        <script type="text/javascript">
+            window.onload = function () {
+                var language = browserLanguage();
+                var lang = getURLArgument("lang");
+                if (lang != undefined)
+                    language = lang;
+                if (language == "ja") {
+                    document.title = "工場コントローラ";
+                    $("#demoInfo").html("このアプリケーションは各ロボットの状態をクラウドにアップロードします。");
+                }
+            }
+            
+            function start(ids, status) {
+                var obj = {status: status};
+                var robot = {};
+                for (var i = 0; i < ids.length; i++) {
+                    if (status == "alarm") {
+                        obj["reason"] = $("#alarm" + ids[i]).val();
+                    } else if (status == "run") {
+                        var r = Math.floor(Math.random() * 10000 );
+                        obj["ONum"] = "O" + ("0000" + r ).slice(-4);
+                    }
+                    robot[ids[i]] = $.extend(true, {}, obj);
+                }
+                var statusString = JSON.stringify(robot);
+                $.ajax({
+                    url: "../common/php/exportJson.php",
+                    type: "post",
+                    dataType: 'json',
+                    data: {
+                        data: statusString,
+                        filePath: "../../robotics/jsons/status.json"
+                    }
+                }).done(function (response) {
+                }).fail(function (response) {
+                });
+            }
+            
+        </script>
+    </head>
+    <body>
+        <div id="content">
+            <div id="demoInfo">This is a dummy application which uploads each robot's status on cloud.</div>
+            <p></p>
+                All Robots<br>
+                <button class="btn btn-default" onclick="start([0,1,2,3,4,5,6,7,8,9], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([0,1,2,3,4,5,6,7,8,9], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([0,1,2,3,4,5,6,7,8,9], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([0,1,2,3,4,5,6,7,8,9], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([0,1,2,3,4,5,6,7,8,9], 'shutdown');">Shut down</button>
+            <hr>
+            <p></p>
+                Arc Weld #1<br>
+                <button class="btn btn-default" onclick="start([0], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([0], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([0], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([0], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([0], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm0" type="text" value="Program error">
+            <p></p>
+                Arc Weld #2<br>
+                <button class="btn btn-default" onclick="start([1], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([1], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([1], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([1], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([1], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm1" type="text" value="Emergency stop">
+            <hr>
+            <p></p>
+                Spot Welding #1<br>
+                <button class="btn btn-default" onclick="start([2], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([2], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([2], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([2], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([2], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm2" type="text" value="Watchdog timer error">
+            <p></p>
+                Spot Welding #2<br>
+                <button class="btn btn-default" onclick="start([3], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([3], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([3], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([3], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([3], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm3" type="text" value="Emergency stop">
+            <p></p>
+                Spot Welding #3<br>
+                <button class="btn btn-default" onclick="start([4], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([4], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([4], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([4], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([4], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm4" type="text" value="Emergency stop">
+            <p></p>
+                Spot Welding #4<br>
+                <button class="btn btn-default" onclick="start([5], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([5], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([5], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([5], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([5], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm5" type="text" value="Emergency stop">
+            <hr>
+            <p></p>
+                Pick-and-place #1<br>
+                <button class="btn btn-default" onclick="start([6], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([6], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([6], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([6], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([6], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm6" type="text" value="Emergency stop">
+            <p></p>
+                Pick-and-place #2<br>
+                <button class="btn btn-default" onclick="start([7], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([7], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([7], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([7], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([7], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm7" type="text" value="Emergency stop">
+            <p></p>
+                CMM #1<br>
+                <button class="btn btn-default" onclick="start([8], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([8], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([8], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([8], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([8], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm7" type="text" value="Emergency stop">
+            <p></p>
+                CMM #2<br>
+                <button class="btn btn-default" onclick="start([9], 'run');">Start</button>
+                <button class="btn btn-default" onclick="start([9], 'stop');">Stop</button>
+                <button class="btn btn-default" onclick="start([9], 'alarm');">Alarm</button>
+                <button class="btn btn-default" onclick="start([9], 'reset');">Reset</button>
+                <button class="btn btn-default" onclick="start([9], 'shutdown');">Shut down</button><p></p>
+                <label>&nbsp;Alarm reason:&nbsp;</label><input id="alarm7" type="text" value="Emergency stop">
+        </div>
+    </body>
+</html>

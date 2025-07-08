@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <title>Factory operating status monitor</title>
+        <script type="text/javascript" src="../src/js/jquery-3.5.1.min.js"></script>
+        <script type="text/javascript" src="../common/jquery-ui-1.12.1/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="../common/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../src/js/hoops_web_viewer.js"></script>
+        <script type="text/javascript" src="../common/js/general_func.js"></script>
+        <script type="text/javascript" src="../common/js/create_viewer.js"></script>
+        <script type="text/javascript" src="../common/js/importCSV.js"></script>
+        <script type="text/javascript" src="../common/js/HC_common.js"></script>
+        <script type="text/javascript" src="js/toolTip.js"></script>
+        <script type="text/javascript" src="js/robotics.js"></script>
+        <script type="text/javascript" src="js/robotInstance.js"></script>
+        <script type="text/javascript" src="../common/js/jquery.periodicalupdater.js"></script>
+        
+        <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
+        
+        <link rel="stylesheet" href="../common/jquery-ui-1.12.1/jquery-ui.min.css">
+        <link rel="stylesheet" href="../common/css/bootstrap.min.css" type="text/css">
+        <link rel="stylesheet" href="css/robotics.css" type="text/css">
+
+        <script type="text/javascript">
+            var viewer;
+            
+            window.onload = function () {
+                var language = browserLanguage();
+                var lang = getURLArgument("lang");
+                if (lang != undefined)
+                    language = lang;
+                
+                viewer = new robotViewer(language);
+                var viewerMode = getURLArgument("viewer");
+                var reverseProxy = getURLArgument("proxy");
+                viewer.start(viewerMode, reverseProxy);
+                                
+                google.charts.load('current', {'packages':['corechart', 'bar']});
+
+            };
+
+        </script>
+    </head>
+    <body>
+        <div id="header"><img src="css/images/HC_logo.png" style="height: 50px"></div>
+        <div id="title">&nbsp;Factory operating status monitor</div>
+        <div id="content">
+            <div id="container"></div>
+            <div id="footer">© Tech Soft 3D All Rights Reserved</div>
+        </div>
+
+        <div id="demoInfo">
+            This demonstration is monitoring operating status uploaded from a distant factory: <br>
+            <a href=controller.html target="_blank">https://cloud.techsoft3d.com/robotics/controller.html</a> (open this factory side application using other device)
+        </div>
+        <button id="ratioBtn" type="button" class="btn btn-default">Factory Operating Ratio</button>
+        <div id="stage"></div>
+        <div id="piechart0" class="piechart"></div>
+        <div id="piechart1" class="piechart"></div>
+        <div id="piechart2" class="piechart"></div>
+        <div id="piechart3" class="piechart"></div>
+        <div id="piechart4" class="piechart"></div>
+        <div id="piechart5" class="piechart"></div>
+        <div id="piechart6" class="piechart"></div>
+        <div id="piechart7" class="piechart"></div>
+        <div id="piechart8" class="piechart"></div>
+        <div id="piechart9" class="piechart"></div>
+        <div id="dialog">
+            <div id="columnChart"></div>
+        </div>
+        
+    </body>
+</html>

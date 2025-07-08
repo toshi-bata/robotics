@@ -1,0 +1,39 @@
+#header {
+    margin-right: 10px;
+    text-align: right;
+}
+#title {
+    height: 32px;
+    background-image: url(images/title_bar.png);
+    font-size: 24px;
+    color: #ffffff;
+}
+#footer {
+    height: 20px;
+    background-color: #6d7172;
+    color: #ffffff;
+    text-align: center;
+}
+#demoInfo {
+    position: absolute;
+    top: 92px;
+    left: 10px;
+}
+.piechart {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+}
+#ratioBtn {
+    position: absolute;
+    bottom: 30px;
+    right: 20px
+}
+.piechart {
+    position: absolute;
+    width: 300px;
+    height: 200px;
+}
+.rarioBtn {
+    width: 100px
+}
