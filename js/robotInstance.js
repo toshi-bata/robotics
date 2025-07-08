@@ -1,4 +1,5 @@
-function robotInstance(viewer, instanceName, robotName, id) {
+import * as Communicator from "./hoops-web-viewer.mjs";
+export function robotInstance(viewer, instanceName, robotName, id) {
     this._viewer = viewer;
     this.instanceName = instanceName;
     this._robotName = robotName;
@@ -23,7 +24,7 @@ robotInstance.prototype.init = function (parentNode, matData, offset, noReverse)
         _this._loadRobotData(matData, noReverse).then(function () {
             _this._findNodeIds(parentNode, offset);
             for (var i = 0; i < _this._targetCnt; i++) {
-                _this._nodeMatrixes.push(_this._viewer.getModel().getNodeMatrix(_this._robotParts[i]));
+                _this._nodeMatrixes.push(_this._viewer.model.getNodeMatrix(_this._robotParts[i]));
             }
             _this.reset();
             resolve();
@@ -67,17 +68,17 @@ robotInstance.prototype._loadRobotData = function (matData, noReverse) {
 
 robotInstance.prototype._findNodeIds = function (parentNode, offset) {
     var _this = this;
-    var model = _this._viewer.getModel();
+    var model = _this._viewer.model;
     var nodes = [];
     findNodeIdsFromName(parentNode, model, _this._robotName, nodes);
     if (nodes.length) {
         _this.robotRootId = nodes[0]
         if (offset != undefined) {
-            var nodeMatrix = _this._viewer.getModel().getNodeMatrix(_this.robotRootId);
+            var nodeMatrix = _this._viewer.model.getNodeMatrix(_this.robotRootId);
 
             var rotatMatrix = new Communicator.Matrix();
             if (offset.a != undefined) {
-                rotatMatrix = new Communicator.Matrix.createFromOffAxisRotation(new Communicator.Point3(0, 0, 1), offset.a);
+                rotatMatrix = Communicator.Matrix.createFromOffAxisRotation(new Communicator.Point3(0, 0, 1), offset.a);
             }
 
             nodeMatrix = Communicator.Matrix.multiply(nodeMatrix, rotatMatrix)
@@ -106,13 +107,13 @@ robotInstance.prototype.reset = function () {
     clearInterval(_this._intervalId);
     _this._count = 0;
     for (var i = 0; i < _this._targetCnt; i++) {
-        var matrix = new Communicator.Matrix.createFromArray(_this._matrixes[i])
-        _this._viewer.getModel().setNodeMatrix(_this._robotParts[i], Communicator.Matrix.multiply(matrix, _this._nodeMatrixes[i]));
+        var matrix = Communicator.Matrix.createFromArray(_this._matrixes[i])
+        _this._viewer.model.setNodeMatrix(_this._robotParts[i], Communicator.Matrix.multiply(matrix, _this._nodeMatrixes[i]));
     }
     _this.status = "idle";
     _this.ONum = "";
     _this.alermReason = "";
-    _this._viewer.getModel().setNodesTransparency([_this.robotRootId], 0.8);
+    _this._viewer.model.setNodesOpacity([_this.robotRootId], 0.8);
 };
 
 robotInstance.prototype.alarm = function (reason) {
@@ -120,7 +121,7 @@ robotInstance.prototype.alarm = function (reason) {
     clearInterval(_this._intervalId);
     _this.status = "alarm";
     _this.alermReason = reason;
-    _this._viewer.getModel().resetNodesTransparency([_this.robotRootId]);
+    _this._viewer.model.resetNodesOpacity([_this.robotRootId]);
 
 };
 
@@ -130,13 +131,13 @@ robotInstance.prototype.startAnimation = function (ONum) {
     if (_this.ONum == "")
         _this.ONum = ONum;
     _this.alermReason = "";
-    _this._viewer.getModel().resetNodesTransparency([_this.robotRootId]);
-    var model = _this._viewer.getModel();
+    _this._viewer.model.resetNodesOpacity([_this.robotRootId]);
+    var model = _this._viewer.model;
 
     var interval = 200;
     function invokeFrame() {
         for (var i = 0; i < _this._targetCnt; i++) {
-            var matrix = new Communicator.Matrix.createFromArray(_this._matrixes[_this._count * _this._targetCnt + i])
+            var matrix = Communicator.Matrix.createFromArray(_this._matrixes[_this._count * _this._targetCnt + i])
             model.setNodeMatrix(_this._robotParts[i], Communicator.Matrix.multiply(matrix, _this._nodeMatrixes[i]));
         }
         _this._count ++;

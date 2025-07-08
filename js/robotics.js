@@ -1,4 +1,8 @@
-function robotViewer(language) {
+import * as Communicator from "./hoops-web-viewer.mjs";
+import { createViewer } from "./create_viewer.js"
+import { toolTipOperator } from "./toolTip.js"
+import { robotInstance } from "./robotInstance.js"
+export function robotViewer(language) {
     this._language = language;
     this._viewer;
     this._robotSystems = [];
@@ -102,15 +106,15 @@ robotViewer.prototype._createViewer = function (viewerMode, reverseProxy) {
             _this._viewer.view.setBackgroundColor(new Communicator.Color(255, 255, 255), new Communicator.Color(192, 192, 192));
 
             // Set selection disable
-            _this._viewer.getSelectionManager().setHighlightFaceElementSelection(false);
-            _this._viewer.getSelectionManager().setHighlightLineElementSelection(false);
+            _this._viewer.selectionManager.setHighlightFaceElementSelection(false);
+            _this._viewer.selectionManager.setHighlightLineElementSelection(false);
 
-            _this._viewer.getSelectionManager().setNodeSelectionColor(new Communicator.Color(128, 255, 255));
+            _this._viewer.selectionManager.setNodeSelectionColor(new Communicator.Color(128, 255, 255));
 
             // View
-            var cameraString = '{"position":{"x":-3386.1913614589566,"y":-7528.616125337548,"z":3223.6934015976053},"target":{"x":2261.5403275520466,"y":-5107.403485060816,"z":-11.350776980114858},"up":{"x":0.4481266824899772,"y":0.13537849966297724,"z":0.8836600807264796},"width":6944.397191551557,"height":6944.397191551557,"projection":1,"nearLimit":0.01,"className":"Communicator.Camera"}'
+            var cameraString = '{"position":{"x":-3386.1913614589566,"y":-7528.616125337548,"z":3223.6934015976053},"target":{"x":2261.5403275520466,"y":-5107.403485060816,"z":-11.350776980114858},"up":{"x":0.4481266824899772,"y":0.13537849966297724,"z":0.8836600807264796},"width":6944.397191551557,"height":6944.397191551557,"projection":0,"nearLimit":0.01,"className":"Communicator.Camera"}'
             var json = JSON.parse(cameraString);
-            var camera = new Communicator.Camera.construct(json);
+            var camera = Communicator.Camera.fromJson(json);
             _this._viewer.view.setCamera(camera);
 
             _this._viewer.view.setDrawMode(Communicator.DrawMode.Shaded);
@@ -336,7 +340,7 @@ robotViewer.prototype._createRobotSystem = function (instanceName, robotName, ma
     var _this = this;
     return new Promise(function (resolve, reject) {
         var model = _this._viewer.model;
-        var root = model.getRootNode();
+        var root = model.getAbsoluteRootNode();
         var nodeName = "robot_system_" + _this._robotSystems.length;
         var nodeId = model.createNode(root, nodeName);
         model.loadSubtreeFromModel(nodeId, robotName).then(function () {
